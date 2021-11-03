@@ -1,51 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 
 namespace Task3
 {
-    public class IP 
+    public class IP
     {
-        public byte IPLevel1 { get; }
-        public byte IPLevel2 { get; }
-        public byte IPLevel3 { get; }
-        public byte IPLevel4 { get; }
-
-        public IP(byte ipLevel1, byte ipLevel2, byte ipLevel3, byte ipLevel4)
+        private byte[] IPLevels { get; }
+        private long IPInNumber { get; }
+        public IP(string ipS)
         {
-            IPLevel1 = ipLevel1;
-            IPLevel2 = ipLevel2;
-            IPLevel3 = ipLevel3;
-            IPLevel4 = ipLevel4;
+            var ip = ipS.Split('.').Select(word => Convert.ToByte(word)).ToArray();
+            IPLevels = ip;
+            IPInNumber = ConvertFromIpToNumber(IPLevels);
         }
-
-        public static int operator -(IP left, IP right)
+        public static long ConvertFromIpToNumber(byte[] ipLevels)
         {
-            if (left > right)
-            {
-                return ((left.IPLevel1 + 1) * 255 * 255 * 255 + (left.IPLevel2 + 1) * 255 * 255 +
-                        (left.IPLevel3 + 1) * 255 + left.IPLevel4 + 1) - ((right.IPLevel1 + 1) * 255 * 255 * 255 +
-                                                                          (right.IPLevel2 + 1) * 255 * 255 +
-                                                                          (right.IPLevel3 + 1) * 255 + right.IPLevel4 +
-                                                                          1);
-            }
-
-            return -1;
+            return Convert.ToInt64(ipLevels[0]*Math.Pow(256, 3))+ipLevels[1]*256*256+ipLevels[2]*256+ipLevels[3];
+        }
+        public static long operator -(IP left, IP right)
+        {
+            return (left > right) ? left.IPInNumber - right.IPInNumber : right.IPInNumber - left.IPInNumber;
         }
         public static bool operator <(IP left, IP right)
         {
-            if (left.IPLevel1 < right.IPLevel1) return true;
-            if (left.IPLevel2 < right.IPLevel2) return true;
-            if (left.IPLevel3 < right.IPLevel3) return true;
-            if (left.IPLevel4 < right.IPLevel4) return true;
-            return false;
+            return (left.IPInNumber < right.IPInNumber)? true : false;
         }
         public static bool operator >(IP left, IP right)
         {
-            if (left.IPLevel1 > right.IPLevel1) return true;
-            if (left.IPLevel2 > right.IPLevel2) return true;
-            if (left.IPLevel3 > right.IPLevel3) return true;
-            if (left.IPLevel4 > right.IPLevel4) return true;
-            return false;  
+            return (left.IPInNumber > right.IPInNumber)? true : false;
+        }
+
+        public override string ToString()
+        {
+            return $"IP: {IPLevels[0]}.{IPLevels[1]}.{IPLevels[2]}.{IPLevels[3]}, also Ip in nubmer variant: {IPInNumber}";
         }
     }
 }

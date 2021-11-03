@@ -5,11 +5,13 @@ namespace Task3
     
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            var p1 = new IP(255, 255, 255, 255);
-            var p2 = new IP(255, 255, 254, 254);
+            Console.WriteLine("Введите IP(в формате ip1.ip2.ip3.ip4):");
+            var p1 = new IP(Console.ReadLine());
+            var p2 = new IP(Console.ReadLine());
             Console.WriteLine($"difference: {p1-p2}");
+            Main();
         }
     }
 }
